@@ -1,0 +1,9 @@
+To install:
+
+0. preinstall mpinv
+
+1. git clone Version2 https://gitlab.com/woland96/phase_diagrams-by-gaussian-process.git
+
+2. python setup.py bdist_wheel
+
+3. pip install dist/GPPhad-1.0-py3-none-any.whl
