@@ -117,12 +117,14 @@ triple point temp: 500.185 ± 1.514
 
 GPPhad models the Helmholtz free energy divided by temperature as a Gaussian Process:
 
-$$\frac{F(T, V)}{T} = f(T, V) + \text{reference}$$
+```math
+\frac{F(T, V)}{T} = f(T, V) + \text{reference}
+```
 
-where $f(T, V) \sim \mathcal{GP}(0, k)$ is the GP with covariance function $k$.
+where `f(T, V) ~ GP(0, k)` is the GP with covariance function `k`.
 
-The GP directly learns derivatives of $F/T$:
-- `d_m_n` represents $\frac{\partial^{m+n} (F/T)}{\partial T^m \partial V^n}$
+The GP directly learns derivatives of `F/T`:
+- `d_m_n` represents `∂^(m+n)(F/T) / ∂T^m ∂V^n`
 
 ### Multi-Phase Architecture
 
@@ -553,28 +555,35 @@ print(f"Expected variance reduction: {np.exp(float(score)):.1%}")
 
 ### Gaussian Process Regression
 
-Given training data $\mathcal{D} = \{(x_i, y_i)\}_{i=1}^N$, the GP posterior at test point $x_*$ is:
+Given training data `D = {(xᵢ, yᵢ)}` for `i = 1...N`, the GP posterior at test point `x*` is:
 
-$$\mu_* = k_*^T K^{-1} y$$
-$$\sigma_*^2 = k_{**} - k_*^T K^{-1} k_*$$
+```math
+\mu_* = k_*^T K^{-1} y
+```
+
+```math
+\sigma_*^2 = k_{**} - k_*^T K^{-1} k_*
+```
 
 where:
-- $K_{ij} = k(x_i, x_j)$ is the covariance matrix
-- $k_* = [k(x_1, x_*), \ldots, k(x_N, x_*)]^T$
-- $k_{**} = k(x_*, x_*)$
+- `Kᵢⱼ = k(xᵢ, xⱼ)` is the covariance matrix
+- `k* = [k(x₁, x*), ..., k(xₙ, x*)]ᵀ`
+- `k** = k(x*, x*)`
 
 ### Derivative Observations
 
 For free energy modeling, we observe derivatives. The covariance between derivatives is:
 
-$$\text{Cov}\left[\frac{\partial^{m+n} f}{\partial T^m \partial V^n}, \frac{\partial^{p+q} f}{\partial T^p \partial V^q}\right] = \frac{\partial^{m+n+p+q} k}{\partial T_1^m \partial V_1^n \partial T_2^p \partial V_2^q}$$
+```math
+\text{Cov}\left[\frac{\partial^{m+n} f}{\partial T^m \partial V^n}, \frac{\partial^{p+q} f}{\partial T^p \partial V^q}\right] = \frac{\partial^{m+n+p+q} k}{\partial T_1^m \partial V_1^n \partial T_2^p \partial V_2^q}
+```
 
 ### Phase Coexistence
 
 At coexistence, phases satisfy:
-1. **Thermal equilibrium**: $T_\alpha = T_\beta$
-2. **Mechanical equilibrium**: $P_\alpha = P_\beta$  
-3. **Chemical equilibrium**: $\mu_\alpha = \mu_\beta$ (or equivalently $G_\alpha = G_\beta$)
+1. **Thermal equilibrium**: `Tα = Tβ`
+2. **Mechanical equilibrium**: `Pα = Pβ`  
+3. **Chemical equilibrium**: `μα = μβ` (or equivalently `Gα = Gβ`)
 
 GPPhad solves these as a nonlinear system with uncertainty propagation.
 
@@ -582,9 +591,11 @@ GPPhad solves these as a nonlinear system with uncertainty propagation.
 
 The acquisition function maximizes information gain:
 
-$$\alpha(x) = -\log\left(\frac{\sigma_{\text{new}}(x)}{\sigma_{\text{old}}}\right)$$
+```math
+\alpha(x) = -\log\left(\frac{\sigma_{\text{new}}(x)}{\sigma_{\text{old}}}\right)
+```
 
-where $\sigma$ is the uncertainty in the target property (e.g., triple point temperature).
+where `σ` is the uncertainty in the target property (e.g., triple point temperature).
 
 ---
 
